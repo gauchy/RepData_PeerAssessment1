@@ -8,7 +8,10 @@ output:
 
 ## Loading and preprocessing the data
 ```{r}
+library(ggplot2)
+library(lubridate)
 rawdata <- read.csv("activity.csv");
+rawdata$date <- ymd(rawdata$date)
 completedata <- rawdata[complete.cases(rawdata),]
 
 ```
@@ -17,6 +20,10 @@ completedata <- rawdata[complete.cases(rawdata),]
 ## What is mean total number of steps taken per day?
 ```{r}
 totalStepsPerDay <- aggregate(steps~date,completedata,sum)
+totalDays = dim(totalStepsPerDay)[[1]]
+hist(totalStepsPerDay$steps,breaks=totalDays,main="Histogram of steps per day",col="red",xlab="Days",ylab="Steps")
+
+##Mean and median per day
 
 ```
 

@@ -4,24 +4,27 @@
 ## Loading and preprocessing the data
 
 ```r
+library(ggplot2)
+library(lubridate)
 rawdata <- read.csv("activity.csv");
+rawdata$date <- ymd(rawdata$date)
 completedata <- rawdata[complete.cases(rawdata),]
-head(completedata)
-```
-
-```
-##     steps       date interval
-## 289     0 2012-10-02        0
-## 290     0 2012-10-02        5
-## 291     0 2012-10-02       10
-## 292     0 2012-10-02       15
-## 293     0 2012-10-02       20
-## 294     0 2012-10-02       25
 ```
 
 
 ## What is mean total number of steps taken per day?
 
+```r
+totalStepsPerDay <- aggregate(steps~date,completedata,sum)
+totalDays = dim(totalStepsPerDay)[[1]]
+hist(totalStepsPerDay$steps,breaks=totalDays,main="Histogram of steps per day",col="red",xlab="Days",ylab="Steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
+##Mean and median per day
+```
 
 
 ## What is the average daily activity pattern?
