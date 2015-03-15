@@ -90,4 +90,48 @@ medianstepsRaw <- median(totalStepsPerDayRaw$steps)
 ```
 mean of total steps per day  1.0766189\times 10^{4}  
 median of total steps per day  1.0766189\times 10^{4}  
+
+Here we see that mean remains the same after imputed data , however median has changed.  
+
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```r
+#Assign day types 
+dayType <- vector();
+for(i in 1:nrow(rawdata))
+{
+  dayName <- weekdays(rawdata[i,2]);
+
+  if(dayName=="Saturday" | dayName=="Sunday")
+  {
+
+    dayType <- c(dayType,"Weekend");
+
+
+  }
+  else
+  {
+
+   dayType <- c(dayType,"Weekday");
+  }
+
+   
+}
+rawdata <- cbind(rawdata,dayType)
+
+#change to factor type
+rawdata$dayType <- as.factor(rawdata$dayType)
+
+#create Aggregate
+intervalBasedAggregate <- aggregate(steps~interval+dayType,rawdata,mean);
+
+
+
+g <- ggplot(intervalBasedAggregate,aes(x=interval,y=steps)) + geom_line();
+g <- g+ facet_grid(dayType~.);
+g <- g + labs(x = "interval", y = "total steps")
+g <- g + ggtitle("Average steps across different intervals for weekend/weekdays")
+print(g)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
