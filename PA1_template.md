@@ -24,12 +24,29 @@ hist(totalStepsPerDay$steps,breaks=totalDays,main="Histogram of steps per day",c
 
 ```r
 ##Mean and median per day
+meansteps <- mean(totalStepsPerDay$steps)
+mediansteps <- median(totalStepsPerDay$steps)
 ```
+mean of total steps per day  1.0766189\times 10^{4}  
+median of total steps per day  10765
 
 
 ## What is the average daily activity pattern?
 
+```r
+intervalBasedAvg <- aggregate(steps~interval,completedata,mean)
+g <- ggplot(intervalBasedAvg,aes(x=interval,y=steps)) + geom_line();
+g <- g + labs(x="interval",y="average steps")
+g <- g + ggtitle("Average steps over intervals")
+print(g)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
+maxAvg <- max(intervalBasedAvg$steps)
+```
+The maximum average over intervals is 206.1698113
 
 ## Imputing missing values
 
