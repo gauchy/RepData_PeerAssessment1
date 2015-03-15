@@ -20,7 +20,9 @@ completedata <- rawdata[complete.cases(rawdata),]
 ## What is mean total number of steps taken per day?
 ```{r}
 totalStepsPerDay <- aggregate(steps~date,completedata,sum)
-totalDays = dim(totalStepsPerDay)[[1]]
+totalDays = dim(totalStepsPerDay)[[1]];
+
+#create histogram
 hist(totalStepsPerDay$steps,breaks=totalDays,main="Histogram of steps per day",col="red",xlab="Days",ylab="Steps")
 
 ##Mean and median per day
@@ -48,6 +50,42 @@ The maximum average over intervals is `r maxAvg`
 
 ## Imputing missing values
 
+``` {r}
+missingCount <- dim(rawdata)[[1]] - dim(completedata)[[1]]
+```
+Total rows with NAs `r missingCount`
 
+```{r}
+
+#Imputing average of interval value in the NAs of Steps
+for(i in 1:nrow(rawdata))
+{
+  if(is.na(rawdata[i,1]))
+  {
+    avgSteps <- intervalBasedAvg[intervalBasedAvg["interval"]==rawdata[i,3],]$steps;
+    
+    rawdata[i,1] <- avgSteps
+  }
+ 
+  
+}
+
+#Aggregate raw data values now 
+totalStepsPerDayRaw <- aggregate(steps~date,rawdata,sum)
+
+
+#create histogram
+hist(totalStepsPerDayRaw$steps,breaks=totalDays,main="Histogram of steps per day(RAW)",col="blue",xlab="Days",ylab="Steps")
+
+##Mean and median per day
+meanstepsRaw <- mean(totalStepsPerDayRaw$steps)
+medianstepsRaw <- median(totalStepsPerDayRaw$steps)
+
+```
+mean of total steps per day  `r meanstepsRaw`  
+median of total steps per day  `r medianstepsRaw`  
+
+Here we see that mean remains the same after imputed data , however median has changed.  
 
 ## Are there differences in activity patterns between weekdays and weekends?
+

@@ -16,7 +16,9 @@ completedata <- rawdata[complete.cases(rawdata),]
 
 ```r
 totalStepsPerDay <- aggregate(steps~date,completedata,sum)
-totalDays = dim(totalStepsPerDay)[[1]]
+totalDays = dim(totalStepsPerDay)[[1]];
+
+#create histogram
 hist(totalStepsPerDay$steps,breaks=totalDays,main="Histogram of steps per day",col="red",xlab="Days",ylab="Steps")
 ```
 
@@ -51,5 +53,41 @@ The maximum average over intervals is 206.1698113
 ## Imputing missing values
 
 
+```r
+missingCount <- dim(rawdata)[[1]] - dim(completedata)[[1]]
+```
+Total rows with NAs 2304
 
+
+```r
+#Imputing average of interval value in the NAs of Steps
+for(i in 1:nrow(rawdata))
+{
+  if(is.na(rawdata[i,1]))
+  {
+    avgSteps <- intervalBasedAvg[intervalBasedAvg["interval"]==rawdata[i,3],]$steps;
+    
+    rawdata[i,1] <- avgSteps
+  }
+ 
+  
+}
+
+#Aggregate raw data values now 
+totalStepsPerDayRaw <- aggregate(steps~date,rawdata,sum)
+
+
+#create histogram
+hist(totalStepsPerDayRaw$steps,breaks=totalDays,main="Histogram of steps per day(RAW)",col="blue",xlab="Days",ylab="Steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
+##Mean and median per day
+meanstepsRaw <- mean(totalStepsPerDayRaw$steps)
+medianstepsRaw <- median(totalStepsPerDayRaw$steps)
+```
+mean of total steps per day  1.0766189\times 10^{4}  
+median of total steps per day  1.0766189\times 10^{4}  
 ## Are there differences in activity patterns between weekdays and weekends?
