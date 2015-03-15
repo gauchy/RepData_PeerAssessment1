@@ -7,11 +7,18 @@ output:
 
 
 ## Loading and preprocessing the data
+```{r}
+rawdata <- read.csv("activity.csv");
+completedata <- rawdata[complete.cases(rawdata),]
 
+```
 
 
 ## What is mean total number of steps taken per day?
+```{r}
+totalStepsPerDay <- aggregate(steps~date,completedata,sum)
 
+```
 
 
 ## What is the average daily activity pattern?
